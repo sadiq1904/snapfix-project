@@ -28,20 +28,7 @@ const [loadingRequests, setLoadingRequests] = useState(false);
 const [fixingRequestId, setFixingRequestId] = useState(null);
 //const isFixing = Number(Data?.request?.count || 0) > 0;
  //console.log("HallAdmin",HallAdmin);
- const getAISummary = async () => {
-  const { data, error } = await supabase.functions.invoke(
-    "AI-SUMMARY"
-  );
-
-  if (error) {
-    console.error("AI analysis error:", error);
-    return;
-  }
-
-  console.log("AI analysis:", data);
-  
-  return data;
-};
+ 
 useEffect(() => {
   const getSession = async () => {
     const {
@@ -61,7 +48,7 @@ useEffect(() => {
 
   getSession();
 
- getAISummary()
+ 
 }, []);
  function getServiceData(request, HallAdmin) {
   if (!request) return null;
@@ -86,6 +73,12 @@ useEffect(() => {
 const getUserServiceData = async () => {
  
   try {
+   const {
+  data: { session },
+  error:Error
+} = await supabase.auth.getSession();
+console.log("SESSION:", session);
+console.log("ERROR:", Error);
     const {
       data: { user },
       error: userError,
@@ -103,6 +96,8 @@ const getUserServiceData = async () => {
       return null;
     }
 
+console.log("SESSION:", session);
+console.log("ERROR:", Error);
     const userId = user.id;
  
 
@@ -162,6 +157,12 @@ const getUserServiceData = async () => {
   }
 };
 const handleAssigned = async (request) => {
+  const {
+  data: { session },
+  error:Error
+} = await supabase.auth.getSession();
+console.log("SESSION:", session);
+console.log("ERROR:", Error);
  const { data: { user } } = await supabase.auth.getUser();
  const meat = handleAssign(user?.id)
  // Immediately change this specific button to yellow
@@ -193,7 +194,12 @@ useEffect(()=>{
 const loadRequests = async () => {
   try {
     setLoadingRequests(true);
-
+const {
+  data: { session },
+  error:Error
+} = await supabase.auth.getSession();
+console.log("SESSION:", session);
+console.log("ERROR:", Error);
     const {
       data: { user },
       error: userError
@@ -208,13 +214,7 @@ const loadRequests = async () => {
       console.log("No authenticated user");
       return;
     }
-const {
-  data: { session },
-  error:Error
-} = await supabase.auth.getSession();
 
-console.log("SESSION:", session);
-console.log("ERROR:", Error);
     /*
       IMPORTANT:
 
@@ -495,6 +495,12 @@ function RequestTable({ requests,HallAdmin, loadingRequests, isSuperAdmin, image
 const getAllData = async () => {
   try {
     const {
+  data: { session },
+  error:Error
+} = await supabase.auth.getSession();
+console.log("SESSION:", session);
+console.log("ERROR:", Error);
+    const {
       data: { user },
       error: userError
     } = await supabase.auth.getUser();
@@ -511,13 +517,6 @@ const getAllData = async () => {
 
     console.log("Current user:", user);
 setEmail(user)
-const {
-  data: { session },
-  error:Error
-} = await supabase.auth.getSession();
-
-console.log("SESSION:", session);
-console.log("ERROR:", Error);
     const { data, error } = await supabase
       .from("profiles")
       .select(`
@@ -578,6 +577,12 @@ const fetchData = async () => {
   console.log("All records:", datad);
 try {
   const {
+  data: { session },
+  error:Error
+} = await supabase.auth.getSession();
+console.log("SESSION:", session);
+console.log("ERROR:", Error);
+  const {
       data: { user },
       error: userError,
     } = await supabase.auth.getUser();
@@ -586,14 +591,7 @@ try {
       console.error("Error getting user:", userError);
       return null;
     }
-    const {
-  data: { session },
-  error:Error
-} = await supabase.auth.getSession();
-
-console.log("SESSION:", session);
-console.log("ERROR:", Error);
- //const userId = user.id;
+  
  const { data, error } = await supabase.storage
   .from('images')
   .list("");
