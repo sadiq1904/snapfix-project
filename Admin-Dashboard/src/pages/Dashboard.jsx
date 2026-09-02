@@ -29,9 +29,18 @@ const [fixingRequestId, setFixingRequestId] = useState(null);
 //const isFixing = Number(Data?.request?.count || 0) > 0;
  //console.log("HallAdmin",HallAdmin);
  const getAISummary = async () => {
+  const { data, error } = await supabase.functions.invoke(
+    "AI-SUMMARY"
+  );
+
+  if (error) {
+    console.error("AI analysis error:", error);
+    return;
+  }
+
+  console.log("AI analysis:", data);
   
-  
-  
+  return data;
 };
 useEffect(() => {
   const getSession = async () => {
